@@ -23,7 +23,7 @@ Open your terminal and run the following commands:
 cd /path/to/my-project.test
 
 # clone the repository to /plugins
-git clone 
+git clone https://github.com/MadMikeyB/craft-commerce-acme-shipping-method.git
 ```
 Add the repository as a PATH repo by adding the below to 
 

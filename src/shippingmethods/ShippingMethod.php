@@ -94,7 +94,7 @@ class ShippingMethod extends Model implements ShippingMethodInterface
      */
     public function getMatchingShippingRule(Order $order): ?ShippingRuleInterface
     {
-        return new ShippingRule();
+        return new \craft\commerce\models\ShippingRule();
     }
 
     /**

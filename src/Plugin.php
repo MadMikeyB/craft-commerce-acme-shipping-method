@@ -6,10 +6,13 @@ use Craft;
 use yii\base\Event;
 use craft\base\Model;
 use craft\base\Plugin as BasePlugin;
+use craft\commerce\adjusters\Shipping;
 use craft\commerce\services\ShippingMethods;
+use craft\commerce\services\OrderAdjustments;
 use acmeinc\craftacmeshippingmethod\models\Settings;
 use craft\commerce\events\RegisterAvailableShippingMethodsEvent;
 use acmeinc\craftacmeshippingmethod\shippingmethods\ShippingMethod as AcmeShippingMethod;
+use acmeinc\craftacmeshippingmethod\shippingmethods\ShippingAdjuster as AcmeShippingAdjuster;
 
 /**
  * Acme Shipping Method plugin
@@ -68,6 +71,23 @@ class Plugin extends BasePlugin
             ShippingMethods::EVENT_REGISTER_AVAILABLE_SHIPPING_METHODS,
             function(RegisterAvailableShippingMethodsEvent $event) {
                 $event->shippingMethods[] = new AcmeShippingMethod();
+            }
+        );
+
+
+        Event::on(
+            OrderAdjustments::class,
+            OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS,
+            function(\craft\events\RegisterComponentTypesEvent $event) {
+                $adjusters = $event->types;
+
+                foreach ($adjusters as $key => $adjuster) {
+                    if ($adjuster == Shipping::class) {
+                        $adjusters[$key] = AcmeShippingAdjuster::class;
+                    }
+                }
+        
+                $event->types = $adjusters;
             }
         );
     }
